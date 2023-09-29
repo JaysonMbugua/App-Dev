@@ -11,9 +11,24 @@ class BusinessListViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
     @Published var isLoading: Bool = false
-  
+    
+    func getBestRestaurantId(Businesses: [Business]) -> String?{
+        var highest = Businesses[0]
+        for i in businesses{
+            if (i.rating > highest.rating){
+                highest = i
+            }
+        }
+        return highest.id
+    }
+    
     func getPlaces() {
         // MARK: Add logic to clear businesses array and return from function here
+        
+        if searchTerm == ""{
+            businesses.removeAll()
+            return
+        }
         
         YelpService.getBusinesses(term: searchTerm, radius: radius) { result in
             DispatchQueue.main.async {
@@ -30,6 +45,8 @@ class BusinessListViewModel: ObservableObject {
             }
         }
     }
+    
+    
     
     // MARK: Write your function here
 }
